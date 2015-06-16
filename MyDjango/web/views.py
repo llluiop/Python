@@ -29,3 +29,5 @@ def person(request):
 
     return HttpResponse(name)
 
+def board(request):
+    return render(request, 'board.html')

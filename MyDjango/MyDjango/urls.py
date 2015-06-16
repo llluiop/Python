@@ -19,6 +19,7 @@ from web.views import current_time
 from web.views import add
 from web.views import person
 from web.views import home
+from web.views import board
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -26,5 +27,6 @@ urlpatterns = [
     url(r'^add/(\d+)/(\d+)', add),
     url(r'^home', home),
     url(r'^person', person),
+    url(r'^board', board),
 
 ]
