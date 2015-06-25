@@ -1,4 +1,4 @@
-"""MyDjango URL Configuration
+"""ToDoList URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/dev/topics/http/urls/
@@ -15,20 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from web.views import current_time
-from web.views import add
-from web.views import person
-from web.views import home
-from web.views import board
-from web.views import postmessage
-
+from quickstart.views import register
+from quickstart.views import index
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^time/', current_time),
-    url(r'^add/(\d+)/(\d+)', add),
-    url(r'^home', home),
-    url(r'^person', person),
-    url(r'^board', board, name='board'),
-    url(r'^postmessage/$', postmessage, name='postmessage')
-
+    url(r'^register/', register, name='register'),
+    url(r'^index/', index, name='index'),
 ]

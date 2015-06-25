@@ -2,8 +2,11 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.http import HttpResponse
-import datetime
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from models import Person
+from models import Message
+import datetime
 
 def current_time(request):
     now = datetime.datetime.now()
@@ -30,4 +33,16 @@ def person(request):
     return HttpResponse(name)
 
 def board(request):
-    return render(request, 'board.html')
+    messages = Message.objects.all()
+    content = {'messages': messages}
+    return render(request, 'board.html', content)
+
+
+def postmessage(request):
+    name = request.POST['name']
+    text = request.POST['text']
+
+    m = Message(name=name, text=text)
+    m.save()
+
+    return HttpResponseRedirect(reverse('board'))
