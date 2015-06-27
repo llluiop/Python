@@ -52,6 +52,7 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<form id="login-form" action="{% url "login" %}" method="post" role="form" style="display: block;">
+								{% csrf_token %}
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -73,13 +74,15 @@
 										<div class="row">
 											<div class="col-lg-12">
 												<div class="text-center">
-													<a href="http://phpoll.com/recover" tabindex="5" class="forgot-password">Forgot Password?</a>
+													<a href="#" tabindex="5" class="forgot-password">Forgot Password?</a>
 												</div>
 											</div>
 										</div>
 									</div>
 								</form>
-								<form id="register-form" action="http://phpoll.com/register/process" method="post" role="form" style="display: none;">
+								<form id="register-form" action="{% url "register" %}" method="post" role="form" style="display: none;">
+								{% csrf_token %}
+								{{uf.as_p}}
 									<div class="form-group">
 										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
 									</div>
@@ -107,7 +110,16 @@
 			</div>
 		</div>
 	</div>
-	<script>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+	
+		<script>
 	$(function() {
 
     $('#login-form-link').click(function(e) {
@@ -127,13 +139,6 @@
 
 	});
 	</script>
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
-    <script src="http://cdn.bootcss.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 	
   </body>
 </html>
