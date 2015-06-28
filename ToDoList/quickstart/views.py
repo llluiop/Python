@@ -5,6 +5,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from quickstart.models import User
+from quickstart.models import Task
 
 # Create your views here.
 class UserForm(forms.Form):
@@ -47,10 +48,17 @@ def login(request):
         response.set_cookie('username', name, 3600)
         return response
     else:
-        return HttpResponseRedirect('index/')
+        return HttpResponseRedirect(reverse('index/'))
 
+
+def logout(request):
+    response = HttpResponseRedirect(reverse('index'))
+    response.delete_cookie('username')
+
+    return response
 
 def home(request):
     username = request.COOKIES.get('username', '')
-    return render_to_response('home.html', {'username': username})
+    tasks = Task.objects.all()
+    return render_to_response('home.html', {'username': username, 'tasks': tasks})
 

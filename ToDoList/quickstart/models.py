@@ -12,3 +12,11 @@ class User(models.Model):
 
     def __unicode__(self):
         return self.username
+
+
+class Task(models.Model):
+    username = models.CharField(max_length=50)
+    taskinfo = models.CharField(max_length=250)
+
+    def __unicode__(self):
+        return self.taskinfo

@@ -19,6 +19,7 @@ from quickstart.views import register
 from quickstart.views import index
 from quickstart.views import login
 from quickstart.views import home
+from quickstart.views import logout
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -26,6 +27,7 @@ urlpatterns = [
     url(r'^index/', index, name='index'),
     url(r'^login/', login, name='login'),
     url(r'^home/', home, name='home'),
+    url(r'^logout/', logout, name='logout'),
 
 
 ]
