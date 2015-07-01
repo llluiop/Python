@@ -62,6 +62,16 @@
           <h1>To do list 示例</h1>
           {#        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>#}
       </div>
+      <div class="container">
+          <div class="row">
+              <div class="col-md-11">
+                  <div class="alert alert-success alert-dismissable fade in hide" id="add-task-suc">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <strong>Success!</strong> Add task success.
+                  </div>
+              </div>
+          </div>
+      </div>
 
       <div class="container">
           <div class="row">
@@ -82,7 +92,7 @@
                           </div>
                       </div>
                       <div class="panel-body">
-                          <ul class="list-group">
+                          <ul class="list-group" id="task-list">
                               {% for each in tasks %}
                                   <li class="list-group-item">
                                       <div class="checkbox">
@@ -91,8 +101,7 @@
                                           </label>
                                       </div>
                                       <div class="pull-right action-buttons">
-                                          <a href="http://www.jquery2dotnet.com" class="trash"><span
-                                                  class="glyphicon glyphicon-trash"></span></a>
+                                          <a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
                                       </div>
                                   </li>
                               {% endfor %}
@@ -123,20 +132,20 @@
                       <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                            aria-hidden="true">
                           <div class="modal-dialog">
-                              <form id="login-form" action="{% url "login" %}" method="post" role="form"
+                              <form id="add-task" action="{% url "addtask" %}" method="post" role="form"
                                     style="display: block;">
                                   {% csrf_token %}
                                   <div class="modal-content">
                                       <div class="modal-header">
                                           <button type="button" class="close" data-dismiss="modal"
-                                                  aria-hidden="true">&times;</button>
+                                                  aria-hidden="true" id="close">&times;</button>
                                           <h4 class="modal-title" id="myModalLabel">Add Task</h4>
                                       </div>
                                       <div class="modal-body">
 
                                           <div class="input-group">
                                               <span class="input-group-addon">New Task</span>
-                                              <input type="text" class="form-control" placeholder="">
+                                              <input type="text" name="taskinfo" class="form-control" placeholder="">
                                           </div>
 
                                       </div>
@@ -158,14 +167,52 @@
       </div>
   </div>
   <!-- /.container -->
-
-
   <!-- Bootstrap core JavaScript
   ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
   <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+  <script src="http://malsup.github.com/jquery.form.js"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 
+  <script>
+      // wait for the DOM to be loaded
+      $(document).ready(function () {
+          // bind 'myForm' and provide a simple callback function
+
+          var options = {
+              //target: '#divToUpdate',
+              //url: 'addtask',
+              dataType: 'json',
+              success: showResponse
+          };
+          $('#add-task').ajaxForm(options);
+      });
+
+      // post-submit callback
+    function showResponse(responseText, statusText, xhr, $form) {
+        // for normal html responses, the first argument to the success callback
+        // is the XMLHttpRequest object's responseText property
+
+        // if the ajaxForm method was passed an Options Object with the dataType
+        // property set to 'xml' then the first argument to the success callback
+        // is the XMLHttpRequest object's responseXML property
+
+        // if the ajaxForm method was passed an Options Object with the dataType
+        // property set to 'json' then the first argument to the success callback
+        // is the json data object returned by the server
+
+        $('#close').click();
+        $('#add-task-suc').attr("class", "alert alert-success alert-dismissable fade in");
+        $('#task-list').append("<li class=\"list-group-item\"><div class=\"checkbox\">\
+                                          <label for=\"checkbox\">"
+                                            + responseText["message"]["taskinfo"] +
+                                          "</label>\
+                                      </div>\
+                                      <div class=\"pull-right action-buttons\">\
+                                          <a href=\"#\" class=\"trash\"><span class=\"glyphicon glyphicon-trash\"></span></a>\
+                                      </div></li>")
+    }
+  </script>
   </body>
 </html>

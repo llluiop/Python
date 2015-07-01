@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import render_to_response
 from django.http import HttpResponse,HttpResponseRedirect
+from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from quickstart.models import User
 from quickstart.models import Task
+import json
 
 # Create your views here.
 def index(request):
@@ -19,7 +21,7 @@ def login(request):
         response.set_cookie('username', name, 3600)
         return response
     else:
-        return HttpResponseRedirect(reverse('index/'))
+        return HttpResponseRedirect(reverse('index'))
 
 
 def logout(request):
@@ -30,6 +32,15 @@ def logout(request):
 
 def home(request):
     username = request.COOKIES.get('username', '')
-    tasks = Task.objects.all()
-    return render_to_response('home.html', {'username': username, 'tasks': tasks})
+    tasks = Task.objects.all().filter(username=username)
+    return render_to_response('home.html', {'username': username, 'tasks': tasks}, context_instance=RequestContext(request))
 
+def addtask(request):
+    taskinfo = request.POST['taskinfo']
+    name = request.COOKIES.get('username')
+
+    task = Task(username=name, taskinfo=taskinfo)
+    task.save()
+
+    # return
+    return HttpResponse(json.dumps({"code": 1, "message": {"taskinfo": taskinfo}}))
