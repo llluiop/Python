@@ -20,6 +20,7 @@ from quickstart.views import login
 from quickstart.views import home
 from quickstart.views import logout
 from quickstart.views import addtask
+from quickstart.views import deltask
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -27,6 +28,7 @@ urlpatterns = [
     url(r'^login/', login, name='login'),
     url(r'^home/', home, name='home'),
     url(r'^logout/', logout, name='logout'),
-    url(r'^addtask/', addtask, name='addtask')
+    url(r'^addtask/', addtask, name='addtask'),
+    url(r'^deltask/', deltask, name='deltask')
 
 ]

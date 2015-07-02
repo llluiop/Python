@@ -44,3 +44,12 @@ def addtask(request):
 
     # return
     return HttpResponse(json.dumps({"code": 1, "message": {"taskinfo": taskinfo}}))
+
+def deltask(request):
+    taskinfo = request.POST['taskinfo']
+    name = request.COOKIES.get('username')
+
+    Task.objects.filter(taskinfo=taskinfo, username=name).delete()
+
+    # return
+    return HttpResponse(json.dumps({"code": 1, "message": {"taskinfo": taskinfo}}))

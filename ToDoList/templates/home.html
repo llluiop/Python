@@ -76,6 +76,17 @@
       <div class="container">
           <div class="row">
               <div class="col-md-11">
+                  <div class="alert alert-success alert-dismissable fade in hide" id="del-task-suc">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <strong>Success!</strong> Delete task success.
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="container">
+          <div class="row">
+              <div class="col-md-11">
                   <div class="panel panel-primary">
                       <div class="panel-heading">
                           <span class="glyphicon glyphicon-list"></span>任务
@@ -100,7 +111,7 @@
                                               {{ each.taskinfo }}
                                           </label>
                                       </div>
-                                      <div class="pull-right action-buttons">
+                                      <div class="pull-right action-buttons" id="delete-btn">
                                           <a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
                                       </div>
                                   </li>
@@ -110,8 +121,7 @@
                       <div class="panel-footer">
                           <div class="row">
                               <div class="col-md-6">
-                                  <h6>
-                                      Total Count <span class="label label-info">{{ tasks.count }}</span></h6>
+                                  <h6>Total Count <span class="label label-info">{{ tasks.count }}</span></h6>
                               </div>
                               <div class="col-md-6">
                                   <ul class="pagination pagination-sm pull-right">
@@ -179,7 +189,6 @@
       // wait for the DOM to be loaded
       $(document).ready(function () {
           // bind 'myForm' and provide a simple callback function
-
           var options = {
               //target: '#divToUpdate',
               //url: 'addtask',
@@ -190,29 +199,46 @@
       });
 
       // post-submit callback
-    function showResponse(responseText, statusText, xhr, $form) {
-        // for normal html responses, the first argument to the success callback
-        // is the XMLHttpRequest object's responseText property
+      function showResponse(responseText, statusText, xhr, $form) {
+          // for normal html responses, the first argument to the success callback
+          // is the XMLHttpRequest object's responseText property
 
-        // if the ajaxForm method was passed an Options Object with the dataType
-        // property set to 'xml' then the first argument to the success callback
-        // is the XMLHttpRequest object's responseXML property
+          // if the ajaxForm method was passed an Options Object with the dataType
+          // property set to 'xml' then the first argument to the success callback
+          // is the XMLHttpRequest object's responseXML property
 
-        // if the ajaxForm method was passed an Options Object with the dataType
-        // property set to 'json' then the first argument to the success callback
-        // is the json data object returned by the server
+          // if the ajaxForm method was passed an Options Object with the dataType
+          // property set to 'json' then the first argument to the success callback
+          // is the json data object returned by the server
 
-        $('#close').click();
-        $('#add-task-suc').attr("class", "alert alert-success alert-dismissable fade in");
-        $('#task-list').append("<li class=\"list-group-item\"><div class=\"checkbox\">\
+          $('#close').click();
+          $('#add-task-suc').attr("class", "alert alert-success alert-dismissable fade in");
+          $('#task-list').append("<li class=\"list-group-item\"><div class=\"checkbox\">\
                                           <label for=\"checkbox\">"
-                                            + responseText["message"]["taskinfo"] +
-                                          "</label>\
-                                      </div>\
-                                      <div class=\"pull-right action-buttons\">\
-                                          <a href=\"#\" class=\"trash\"><span class=\"glyphicon glyphicon-trash\"></span></a>\
-                                      </div></li>")
-    }
+                  + responseText["message"]["taskinfo"] +
+                  "</label>\
+              </div>\
+              <div class=\"pull-right action-buttons\">\
+                  <a href=\"#\" class=\"trash\"><span class=\"glyphicon glyphicon-trash\"></span></a>\
+              </div></li>")
+      }
+
+      $.ajaxSetup({
+          data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+      });
+
+      $(function () {
+          $("#task-list li").each(function () {
+              $("#delete-btn a", this).click(function () {
+                  //alert($(this).parent().parent().text());
+                  $.post('{% url "deltask" %}', {'taskinfo': $.trim($(this).parent().parent().text())}, function (ret) {
+                  })
+                  $(this).parent().parent().remove();
+
+              });
+          });
+      });
+
   </script>
   </body>
 </html>
