@@ -69,7 +69,7 @@
                       <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                       <strong>Success!</strong> Add task success.
                   </div>
-              </div>
+              </div>    `
           </div>
       </div>
 
@@ -196,6 +196,13 @@
               success: showResponse
           };
           $('#add-task').ajaxForm(options);
+
+
+          $(document).on('click', '.trash', function() {
+              $.post('{% url "deltask" %}', {'taskinfo': $.trim($(this).parent().parent().text())}, function (ret) {
+              })
+              $(this).parent().parent().remove();
+            });
       });
 
       // post-submit callback
@@ -225,18 +232,6 @@
 
       $.ajaxSetup({
           data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
-      });
-
-      $(function () {
-          $("#task-list li").each(function () {
-              $("#delete-btn a", this).click(function () {
-                  //alert($(this).parent().parent().text());
-                  $.post('{% url "deltask" %}', {'taskinfo': $.trim($(this).parent().parent().text())}, function (ret) {
-                  })
-                  $(this).parent().parent().remove();
-
-              });
-          });
       });
 
   </script>
